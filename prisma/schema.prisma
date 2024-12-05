@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String
+  password String
+  name     String
+
+  plates Plate[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Plate {
+  plate String @id
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  parks Parking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Park {
+  id   String @id @default(uuid())
+  name String
+
+  parking Parking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Parking {
+  id        String   @id @default(uuid())
+  startedAt DateTime
+  endedAt   DateTime
+
+  plateId String
+  plate   Plate  @relation(fields: [plateId], references: [plate])
+
+  parkId String
+  park   Park   @relation(fields: [parkId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

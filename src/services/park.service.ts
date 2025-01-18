@@ -20,7 +20,7 @@ async function getAllParks() {
     return park;
   });
 
-  return { success: true, parksWithParking };
+  return { success: true, parks: parksWithParking };
 }
 
 async function getAllParkings() {

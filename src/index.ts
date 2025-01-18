@@ -50,6 +50,12 @@ app.post("/plate/create-plate", async (req, res) => {
 
 app.use("/parks", async (req, res, next) => {
   const token = req.headers.authorization?.split("Bearer ")[1];
+
+  if (token == process.env.ADMIN_TOKEN) {
+    next();
+    return
+  }
+
   const user = await userService.getAccountByJWT(token || "");
 
   if (user.user && user.success) {
@@ -70,6 +76,10 @@ app.get("/parks", async (_, res) => {
 app.use("/parkings", async (req, res, next) => {
   const token = req.headers.authorization?.split("Bearer ")[1];
   const user = await userService.getAccountByJWT(token || "");
+  if (token == process.env.ADMIN_TOKEN) {
+    next();
+    return
+  }
 
   if (user.user && user.success) {
     // @ts-expect-error
@@ -110,6 +120,6 @@ app.post("/parking/buy", async (req, res) => {
   res.json(response);
 });
 
-app.listen(3000, () => {
-  console.log("Servidor aberto na porta 3000");
+app.listen(25565, () => {
+  console.log("Servidor aberto na porta 25565");
 });
